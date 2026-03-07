@@ -2,11 +2,7 @@ package main
 
 import (
 	"ZCrypt/internal/CrypticEngine"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
 	"fmt"
-	"io"
 )
 
 func main() {
@@ -22,27 +18,9 @@ func main() {
 		DEK: []byte("..whatifthekeyisalsohellowthere!"),
 	}
 
-	AAD := CrypticEngine.BuildAAD(record.SchemaVersion, record.UserID, record.TemplateID, record.TemplateType, record.TemplateVer)
-
 	text := []byte("hellow there !")
 
-	ZCipher, err := aes.NewCipher(record.DEK)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	gcm, err := cipher.NewGCM(ZCipher)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	record.TemplateNonce = make([]byte, gcm.NonceSize())
-
-	if _, err = io.ReadFull(rand.Reader, record.TemplateNonce); err != nil {
-		fmt.Println(err)
-	}
-
-	record.Ciphertext = gcm.Seal(record.TemplateNonce, record.TemplateNonce, text, AAD)
+	record.Ciphertext = CrypticEngine.Encrypt(record, text)
 
 	fmt.Println(record.Ciphertext)
 }
