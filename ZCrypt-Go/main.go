@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ZCrypt/internal/CrypticEngine"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
@@ -11,10 +12,21 @@ import (
 func main() {
 	fmt.Println("meow !!")
 
-	text := []byte("hellow there !")
-	key := []byte("..whatifthekeyisalsohellowthere!")
+	record := CrypticEngine.CrypticRecord{
+		SchemaVersion: 999,
+		UserID:        "45567889",
+		TemplateID:    "753468",
+		TemplateType:  "Fusion",
+		TemplateVer:   1,
 
-	ZCipher, err := aes.NewCipher(key)
+		DEK: []byte("..whatifthekeyisalsohellowthere!"),
+	}
+
+	AAD := CrypticEngine.BuildAAD(record.SchemaVersion, record.UserID, record.TemplateID, record.TemplateType, record.TemplateVer)
+
+	text := []byte("hellow there !")
+
+	ZCipher, err := aes.NewCipher(record.DEK)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -24,12 +36,13 @@ func main() {
 		fmt.Println(err)
 	}
 
-	nonce := make([]byte, gcm.NonceSize())
+	record.TemplateNonce = make([]byte, gcm.NonceSize())
 
-	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+	if _, err = io.ReadFull(rand.Reader, record.TemplateNonce); err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(gcm.Seal(nonce, nonce, text, nil))
+	record.Ciphertext = gcm.Seal(record.TemplateNonce, record.TemplateNonce, text, AAD)
 
+	fmt.Println(record.Ciphertext)
 }
