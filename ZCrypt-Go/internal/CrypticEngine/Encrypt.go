@@ -10,6 +10,7 @@ import (
 
 func Encrypt(record CrypticRecord, text []byte) []byte {
 
+	fmt.Println("meow !!")
 	AAD := BuildAAD(record.SchemaVersion, record.UserID, record.TemplateID, record.TemplateType, record.TemplateVer)
 
 	ZCipher, err := aes.NewCipher(record.DEK)

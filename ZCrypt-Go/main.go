@@ -3,10 +3,11 @@ package main
 import (
 	"ZCrypt/internal/CrypticEngine"
 	"fmt"
+	"os"
 )
 
 func main() {
-	fmt.Println("meow !!")
+	text := []byte(os.Args[1])
 
 	record := CrypticEngine.CrypticRecord{
 		SchemaVersion: 999,
@@ -18,9 +19,9 @@ func main() {
 		DEK: []byte("..whatifthekeyisalsohellowthere!"),
 	}
 
-	text := []byte("hellow there !")
-
 	record.Ciphertext = CrypticEngine.Encrypt(record, text)
 
 	fmt.Println(record.Ciphertext)
+
+	fmt.Println(string(CrypticEngine.Decrypt(record.DEK, record, record.Ciphertext)))
 }
