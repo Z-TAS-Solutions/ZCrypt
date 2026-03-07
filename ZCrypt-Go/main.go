@@ -2,12 +2,14 @@ package main
 
 import (
 	"ZCrypt/internal/CrypticEngine"
+	"crypto/rand"
 	"fmt"
+	"io"
 	"os"
 )
 
 func main() {
-	text := []byte(os.Args[1])
+	FilePath := os.Args[1]
 
 	record := CrypticEngine.CrypticRecord{
 		SchemaVersion: 999,
@@ -15,13 +17,25 @@ func main() {
 		TemplateID:    "753468",
 		TemplateType:  "Fusion",
 		TemplateVer:   1,
-
-		DEK: []byte("..whatifthekeyisalsohellowthere!"),
 	}
 
-	record.Ciphertext = CrypticEngine.Encrypt(record, text)
+	Data, err := os.ReadFile(FilePath)
+	if err != nil {
+		fmt.Println("check the damned file ffs", err)
+		os.Exit(1)
+	}
 
-	fmt.Println(record.Ciphertext)
+	KEK := make([]byte, CrypticEngine.DEKSize)
+	if _, err := io.ReadFull(rand.Reader, KEK); err != nil {
+		fmt.Println(err)
+	}
 
-	fmt.Println(string(CrypticEngine.Decrypt(record.DEK, record, record.Ciphertext)))
+	record.Ciphertext = CrypticEngine.Encrypt(&record, KEK, Data)
+
+	fmt.Println("Nounce: ", record.TemplateNonce)
+	fmt.Println("Ciphertext: ", record.Ciphertext)
+	fmt.Println("DEK: ", record.DEK)
+	fmt.Println("WrapNounce: ", record.WrapNonce)
+
+	fmt.Println(string(CrypticEngine.Decrypt(&record, KEK)))
 }

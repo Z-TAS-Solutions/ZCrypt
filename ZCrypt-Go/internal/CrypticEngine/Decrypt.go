@@ -6,31 +6,33 @@ import (
 	"fmt"
 )
 
-func Decrypt(Key []byte, record CrypticRecord, CipherText []byte) []byte {
+func Decrypt(record *CrypticRecord, KEK []byte) []byte {
 	fmt.Println("Demeow !")
 
 	AAD := BuildAAD(record.SchemaVersion, record.UserID, record.TemplateID, record.TemplateType, record.TemplateVer)
 
-	Cipher, err := aes.NewCipher(Key)
+	DEK, err := GCMOpen(KEK, record.WrapNonce, record.DEK, AAD)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	gcm, err := cipher.NewGCM(Cipher)
+	Data, err := GCMOpen(DEK, record.TemplateNonce, record.Ciphertext, AAD)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	nonceSize := gcm.NonceSize()
-	if len(CipherText) < nonceSize {
-		fmt.Println(err)
-	}
+	return Data
 
-	nonce, CipherText := CipherText[:nonceSize], CipherText[nonceSize:]
-	plaintext, err := gcm.Open(nil, nonce, CipherText, AAD)
+}
 
+func GCMOpen(Key, Nonce, CipherText, AAD []byte) ([]byte, error) {
+	ZCipher, err := aes.NewCipher(Key)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
-	return plaintext
+	gcm, err := cipher.NewGCM(ZCipher)
+	if err != nil {
+		return nil, err
+	}
+	return gcm.Open(nil, Nonce, CipherText, AAD)
 }

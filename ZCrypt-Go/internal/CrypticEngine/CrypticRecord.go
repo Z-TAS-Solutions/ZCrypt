@@ -1,5 +1,10 @@
 package CrypticEngine
 
+const (
+	NonceSizeGCM = 12
+	DEKSize      = 32
+)
+
 type CrypticRecord struct {
 	SchemaVersion uint16
 
@@ -10,6 +15,7 @@ type CrypticRecord struct {
 
 	DEK           []byte
 	TemplateNonce []byte
+	WrapNonce     []byte
 
 	Ciphertext []byte
 }
