@@ -1,4 +1,6 @@
-use serde::{Serialize, Deserialize};
+use super::aad_builder::AAD;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CrypticRecord {
@@ -18,6 +20,46 @@ pub struct CrypticRecordBuilder {
     inner: CrypticRecord,
 }
 
+impl CrypticRecord {
+    pub fn new_from_aad(
+        aad: AAD,
+        template_nonce: [u8; 12],
+        wrapped_dek: Vec<u8>,
+        wrap_nonce: [u8; 12],
+        ciphertext: Vec<u8>,
+    ) -> Self {
+        Self {
+            schema_version: aad.schema_version,
+            user_id: aad.user_id,
+            template_id: aad.template_id,
+            template_type: aad.template_type,
+            template_ver: aad.template_ver,
+
+            template_nonce,
+            wrapped_dek,
+            wrap_nonce,
+            ciphertext,
+        }
+    }
+}
+
+impl From<AAD> for CrypticRecord {
+    fn from(aad: AAD) -> Self {
+        Self {
+            schema_version: aad.schema_version,
+            user_id: aad.user_id,
+            template_id: aad.template_id,
+            template_type: aad.template_type,
+            template_ver: aad.template_ver,
+
+            template_nonce: [0u8; 12],
+            wrapped_dek: Vec::new(),
+            wrap_nonce: [0u8; 12],
+            ciphertext: Vec::new(),
+        }
+    }
+}
+
 impl CrypticRecordBuilder {
     pub fn new() -> Self {
         Self {
@@ -32,7 +74,7 @@ impl CrypticRecordBuilder {
                 wrapped_dek: Vec::new(),
                 wrap_nonce: [0u8; 12],
                 ciphertext: Vec::new(),
-            }
+            },
         }
     }
 

@@ -1,5 +1,7 @@
-use serde::{Serialize, Deserialize};
+use super::cryptic_record::CrypticRecord;
+
 use bincode;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[repr(C)]
@@ -14,6 +16,30 @@ pub struct AAD {
 impl AAD {
     pub fn to_bytes(&self) -> Vec<u8> {
         bincode::serialize(self).expect("AAD serialization faliure detected !")
+    }
+}
+
+impl From<CrypticRecord> for AAD {
+    fn from(record: CrypticRecord) -> Self {
+        Self {
+            schema_version: record.schema_version,
+            user_id: record.user_id,
+            template_id: record.template_id,
+            template_type: record.template_type,
+            template_ver: record.template_ver,
+        }
+    }
+}
+
+impl AAD {
+    pub fn from_record(record: &CrypticRecord) -> Self {
+        Self {
+            schema_version: record.schema_version,
+            user_id: record.user_id.clone(),
+            template_id: record.template_id.clone(),
+            template_type: record.template_type.clone(),
+            template_ver: record.template_ver,
+        }
     }
 }
 
