@@ -1,0 +1,9 @@
+[package]
+name = "cryptic_engine"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aes-gcm = "0.10.3"
+hex = "0.4"
+bincode = "3.0.0"
