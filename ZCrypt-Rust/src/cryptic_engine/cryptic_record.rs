@@ -8,9 +8,9 @@ pub struct CrypticRecord {
     pub template_type: String,
     pub template_ver: u16,
 
-    pub template_nonce: Vec<u8>,
+    pub template_nonce: [u8; 12],
     pub wrapped_dek: Vec<u8>,
-    pub wrap_nonce: Vec<u8>,
+    pub wrap_nonce: [u8; 12],
     pub ciphertext: Vec<u8>,
 }
 
@@ -28,9 +28,9 @@ impl CrypticRecordBuilder {
                 template_type: String::new(),
                 template_ver: 1,
 
-                template_nonce: Vec::new(),
+                template_nonce: [0u8; 12],
                 wrapped_dek: Vec::new(),
-                wrap_nonce: Vec::new(),
+                wrap_nonce: [0u8; 12],
                 ciphertext: Vec::new(),
             }
         }
@@ -56,7 +56,7 @@ impl CrypticRecordBuilder {
         self
     }
 
-    pub fn template_nonce(mut self, template_nonce: Vec<u8>) -> Self {
+    pub fn template_nonce(mut self, template_nonce: [u8; 12]) -> Self {
         self.inner.template_nonce = template_nonce;
         self
     }
@@ -66,7 +66,7 @@ impl CrypticRecordBuilder {
         self
     }
 
-    pub fn wrap_nonce(mut self, wrap_nonce: Vec<u8>) -> Self {
+    pub fn wrap_nonce(mut self, wrap_nonce: [u8; 12]) -> Self {
         self.inner.wrap_nonce = wrap_nonce;
         self
     }

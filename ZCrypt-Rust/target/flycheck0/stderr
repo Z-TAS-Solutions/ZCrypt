@@ -1,88 +1,14 @@
-   0.078815900s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: fingerprint error for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: false }/TargetInner { name: "ZCrypt", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\main.rs", Edition2024) }
-   0.078857700s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust\target\debug\.fingerprint\ZCrypt-e5ff47307ff9ebcd\bin-ZCrypt`
-
-Caused by:
-    The system cannot find the file specified. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-   0.094600700s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint: fingerprint error for bincode v1.3.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("bincode", ["lib"], "C:\\Users\\super\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\bincode-1.3.3\\src\\lib.rs", Edition2015) }
-   0.095039600s  INFO prepare_target{force=false package_id=bincode v1.3.3 target="bincode"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust\target\debug\.fingerprint\bincode-dc40c250b0baa938\lib-bincode`
-
-Caused by:
-    The system cannot find the file specified. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_filter_source_repo
-  12: git_libgit2_prerelease
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: <unknown>
-  17: git_midx_writer_dump
-  18: git_filter_source_repo
-  19: git_midx_writer_dump
-  20: BaseThreadInitThunk
-  21: RtlUserThreadStart
-   0.099643000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: fingerprint error for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: true }/TargetInner { name: "ZCrypt", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\main.rs", Edition2024) }
-   0.099660800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust\target\debug\.fingerprint\ZCrypt-d50be876463d21d6\test-bin-ZCrypt`
-
-Caused by:
-    The system cannot find the file specified. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_repo
-   6: git_filter_source_repo
-   7: git_filter_source_repo
-   8: git_filter_source_repo
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_libgit2_prerelease
-  12: <unknown>
-  13: <unknown>
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-    Checking bincode v1.3.3
+   0.077501800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: stale: changed "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\cryptic_engine\\cryptic_record.rs"
+   0.077530000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:           (vs) "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-e5ff47307ff9ebcd\\dep-bin-ZCrypt"
+   0.077535500s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13417455464, nanos: 591590600 } < FileTime { seconds: 13417457161, nanos: 291253300 }
+   0.077694800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: fingerprint dirty for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: false }/TargetInner { name: "ZCrypt", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\main.rs", Edition2024) }
+   0.077720000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-e5ff47307ff9ebcd\\dep-bin-ZCrypt", reference_mtime: FileTime { seconds: 13417455464, nanos: 591590600 }, stale: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\cryptic_engine\\cryptic_record.rs", stale_mtime: FileTime { seconds: 13417457161, nanos: 291253300 } }))
+   0.086609800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: stale: changed "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\cryptic_engine\\cryptic_record.rs"
+   0.086624000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:           (vs) "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-d50be876463d21d6\\dep-test-bin-ZCrypt"
+   0.086629700s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13417455464, nanos: 591590600 } < FileTime { seconds: 13417457161, nanos: 291253300 }
+   0.086756900s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint: fingerprint dirty for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: true }/TargetInner { name: "ZCrypt", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\main.rs", Edition2024) }
+   0.086773100s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="ZCrypt"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-d50be876463d21d6\\dep-test-bin-ZCrypt", reference_mtime: FileTime { seconds: 13417455464, nanos: 591590600 }, stale: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\cryptic_engine\\cryptic_record.rs", stale_mtime: FileTime { seconds: 13417457161, nanos: 291253300 } }))
     Checking ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.55s
+error: could not compile `ZCrypt` (bin "ZCrypt") due to 4 previous errors; 1 warning emitted
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `ZCrypt` (bin "ZCrypt" test) due to 4 previous errors; 1 warning emitted
