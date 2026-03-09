@@ -5,11 +5,11 @@ use crate::cryptic_engine::cryptic_record::CrypticRecord;
 use crate::cryptic_engine::cryptic_record::CrypticRecordBuilder;
 use crate::cryptic_engine::decrypt::gcm_open;
 use crate::cryptic_engine::encrypt::gcm_seal;
-use hex;
+use std::fs;
 
 use aes_gcm::{
     Aes256Gcm,
-    aead::{Aead, AeadCore, KeyInit, OsRng, Payload, generic_array::GenericArray},
+    aead::{KeyInit, OsRng},
 };
 
 fn main() -> Result<(), aes_gcm::Error> {
@@ -26,7 +26,13 @@ fn main() -> Result<(), aes_gcm::Error> {
     let record = gcm_seal(&kek, aad_record, "hellow there !".into())?;
     println!("Cipher Text: {:#?}", record.ciphertext);
 
-    let text = gcm_open(&kek, record);
+    let serialized = serde_json::to_string_pretty(&record).unwrap();
+    let result = fs::write("test.json", serialized);
+
+    let data = fs::read_to_string("test.json").unwrap();
+    let deserialized: CrypticRecord = serde_json::from_str(&data).unwrap();
+
+    let text = gcm_open(&kek, deserialized);
     println!("Decrypted Text: {:#?}", text);
 
     Ok(())
