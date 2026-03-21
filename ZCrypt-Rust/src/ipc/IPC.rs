@@ -34,52 +34,59 @@ pub mod ipc {
 
 #[cfg(windows)]
 pub mod ipc {
-    use std::fs::OpenOptions;
-    use std::os::windows::fs::OpenOptionsExt;
-    use std::thread;
-    use std::time::Duration;
+    use named_pipe::{PipeClient, PipeOptions, PipeServer};
+    use std::io::{Read, Write};
 
     pub struct Server {
-        path: String,
+        named_pipe: String,
+        stream: Option<PipeServer>,
     }
 
     impl Server {
-        pub fn bind(path: &str) -> std::io::Result<Self> {
+        pub fn initialize(path: &str) -> std::io::Result<Self> {
             Ok(Server {
-                path: path.to_string(),
+                named_pipe: path.to_string(),
+                stream: None,
             })
         }
 
-        pub fn accept(&self) -> std::io::Result<std::fs::File> {
-            loop {
-                if let Ok(file) = OpenOptions::new()
-                    .read(true)
-                    .write(true)
-                    .custom_flags(0)
-                    .open(&self.path)
-                {
-                    println!("Peasant Connected !");
-                    return Ok(file);
-                }
-                thread::sleep(Duration::from_millis(100));
-            }
+        pub fn connect(&mut self) -> std::io::Result<()> {
+            let server = PipeOptions::new(&self.named_pipe).single()?;
+            println!("Server waiting for Peasant...");
+            self.stream.insert(server.wait()?);
+            println!("Peasant connected!");
+            Ok(())
+        }
+
+        pub fn read(&mut self) -> std::io::Result<()> {
+            let mut buf = [0u8; 1024];
+            let n = self.stream.as_mut().unwrap().read(&mut buf)?;
+            println!("Response: {}", String::from_utf8_lossy(&buf[..n]));
+            Ok(())
         }
     }
 
-    pub type Client = std::fs::File;
+    pub struct Client {
+        named_pipe: String,
+        client: Option<PipeClient>,
+    }
 
-    pub fn connect(path: &str) -> std::io::Result<Client> {
-        loop {
-            if let Ok(file) = OpenOptions::new()
-                .read(true)
-                .write(true)
-                .custom_flags(0)
-                .open(path)
-            {
-                println!("Connected");
-                return Ok(file);
-            }
-            thread::sleep(Duration::from_millis(100));
+    impl Client {
+        pub fn initialize(path: &str) -> std::io::Result<Self> {
+            Ok(Client {
+                named_pipe: path.to_string(),
+                client: None,
+            })
+        }
+
+        pub fn connect(&mut self) -> std::io::Result<()> {
+            self.client.insert(PipeClient::connect(&self.named_pipe)?);
+            Ok(())
+        }
+
+        pub fn write(&mut self) -> std::io::Result<()> {
+            self.client.as_mut().unwrap().write(b"Hello Peasant!")?;
+            Ok(())
         }
     }
 }
