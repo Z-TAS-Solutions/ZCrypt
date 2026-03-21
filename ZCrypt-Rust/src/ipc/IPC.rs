@@ -91,6 +91,26 @@ pub mod ipc {
             Ok(())
         }
 
+        pub fn connect_ex(&mut self, retries: i32) -> std::io::Result<()> {
+            let mut attempts = retries;
+            while attempts < 5 {
+                match PipeClient::connect(&self.named_pipe) {
+                    Ok(c) => {
+                        self.client.insert(c);
+                        return Ok(());
+                    }
+                    Err(_) => {
+                        std::thread::sleep(std::time::Duration::from_millis(500));
+                        attempts += 1;
+                    }
+                }
+            }
+            Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Failed to connect",
+            ))
+        }
+
         pub fn write(&mut self, data: &[u8]) -> std::io::Result<()> {
             if let Some(client) = self.client.as_mut() {
                 client.write_all(data)?;
