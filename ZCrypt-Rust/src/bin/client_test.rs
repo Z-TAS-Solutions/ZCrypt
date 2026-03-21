@@ -7,7 +7,9 @@ fn main() -> std::io::Result<()> {
 
     client.connect()?;
 
-    client.write()?;
+    client.write("Hellow Peasant !!!".as_bytes())?;
 
+    let data = client.read()?;
+    println!("Received: {}", String::from_utf8_lossy(&data));
     Ok(())
 }

@@ -58,10 +58,17 @@ pub mod ipc {
             Ok(())
         }
 
-        pub fn read(&mut self) -> std::io::Result<()> {
-            let mut buf = [0u8; 1024];
-            let n = self.stream.as_mut().unwrap().read(&mut buf)?;
-            println!("Response: {}", String::from_utf8_lossy(&buf[..n]));
+        pub fn read(&mut self) -> std::io::Result<Vec<u8>> {
+            let mut buffer = vec![0u8; 1024];
+            let n = self.stream.as_mut().unwrap().read(&mut buffer)?;
+            buffer.truncate(n);
+            Ok(buffer)
+        }
+
+        pub fn write(&mut self, data: &[u8]) -> std::io::Result<()> {
+            if let Some(stream) = self.stream.as_mut() {
+                stream.write_all(data)?;
+            }
             Ok(())
         }
     }
@@ -84,9 +91,17 @@ pub mod ipc {
             Ok(())
         }
 
-        pub fn write(&mut self) -> std::io::Result<()> {
-            self.client.as_mut().unwrap().write(b"Hello Peasant!")?;
+        pub fn write(&mut self, data: &[u8]) -> std::io::Result<()> {
+            if let Some(client) = self.client.as_mut() {
+                client.write_all(data)?;
+            }
             Ok(())
+        }
+
+        pub fn read(&mut self) -> std::io::Result<Vec<u8>> {
+            let mut buffer = vec![0u8; 1024];
+            let n = self.client.as_mut().unwrap().read(&mut buffer)?;
+            Ok(buffer)
         }
     }
 }
