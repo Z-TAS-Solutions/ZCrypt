@@ -1,7 +1,7 @@
 use ZCrypt::ipc::ipc::ipc::Server;
 
 fn main() -> std::io::Result<()> {
-    let mut server = Server::initialize(r"\\.\pipe\mypipe")?;
+    let mut server = Server::initialize(r"\\.\pipe\Z-IPC")?;
 
     server.connect()?;
     let data = server.read()?;

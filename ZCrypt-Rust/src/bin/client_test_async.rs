@@ -2,7 +2,7 @@ use ZCrypt::ipc::async_ipc::async_ipc_tokio::AsyncClient;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let mut client = AsyncClient::initialize(r"\\.\pipe\mypipe");
+    let mut client = AsyncClient::initialize(r"\\.\pipe\Z-IPC");
 
     // Use retry version (important for async startup timing)
     client.connect_ex(10, 500).await?;

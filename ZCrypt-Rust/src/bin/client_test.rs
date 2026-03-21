@@ -1,9 +1,9 @@
 use ZCrypt::ipc::ipc::ipc::Client;
 
 fn main() -> std::io::Result<()> {
-    let pipe_name = r"\\.\pipe\zcrypt_sock";
+    let pipe_name = r"\\.\pipe\Z-IPC";
 
-    let mut client = Client::initialize(r"\\.\pipe\mypipe")?;
+    let mut client = Client::initialize(pipe_name)?;
 
     client.connect()?;
 

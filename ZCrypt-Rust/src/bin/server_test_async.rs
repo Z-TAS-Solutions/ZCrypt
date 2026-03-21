@@ -2,7 +2,7 @@ use ZCrypt::ipc::async_ipc::async_ipc_tokio::AsyncServer;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let mut server = AsyncServer::initialize(r"\\.\pipe\mypipe");
+    let mut server = AsyncServer::initialize(r"\\.\pipe\Z-IPC");
 
     server.connect().await?;
 
