@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package zproto;
+
+message PingRequest {
+  string message = 1;
+}
+
+message PingResponse {
+  string reply = 1;
+}
+
+message TestPacket {
+  uint32 id = 1;
+  bytes payload = 2;
+  uint64 timestamp = 3;
+}
+
+service TestService {
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc SendData(TestPacket) returns (PingResponse);
+}
