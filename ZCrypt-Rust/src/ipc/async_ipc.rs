@@ -24,7 +24,8 @@ pub mod async_ipc_tokio {
             let server = ServerOptions::new()
                 .first_pipe_instance(true)
                 .create(&self.named_pipe)?;
-            server.connect().await()?;
+            println!("Awaiting peasants !")
+            server.connect().await?;
             println!("Async server: client connected!");
             self.stream = Some(server);
             Ok(())
