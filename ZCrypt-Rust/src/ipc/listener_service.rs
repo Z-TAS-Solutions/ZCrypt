@@ -2,10 +2,13 @@
 pub mod listener_service {
     use super::super::async_ipc::async_ipc_tokio::AsyncClient;
     use std::time::Duration;
+    use tokio::sync::mpsc;
     use tokio::task::JoinHandle;
 
-    pub fn ipc_listener(pipe_path: String) -> JoinHandle<()> {
-        tokio::spawn(async move {
+    pub fn ipc_listener(pipe_path: String) -> (JoinHandle<()>, mpsc::Sender<Vec<u8>>) {
+        let (enqueue, mut msg_queue) = mpsc::channel::<Vec<u8>>(32);
+
+        let handle = tokio::spawn(async move {
             let mut ipc_client = AsyncClient::initialize(&pipe_path);
 
             loop {
@@ -19,16 +22,30 @@ pub mod listener_service {
                         println!("Bridge: Connected to IPC! Starting message loop.");
 
                         loop {
-                            match ipc_client.read().await {
-                                Ok(buffer) => {
-                                    // Gotta add the grpc bit here later
-                                    println!("Received : {}", String::from_utf8_lossy(&buffer))
+                            tokio::select! {
+                                result = ipc_client.read() => {
+                                    match result {
+                                        Ok(buffer) => {
+                                            // Gotta add the grpc bit here later
+                                            println!("Received : {}", String::from_utf8_lossy(&buffer))
+                                        }
+                                        Err(error) => {
+                                            // server died, prolly. but hey, we're rebooting.
+                                            println!("Bridge: IPC read failed (Disconnected): {}", error);
+                                            break;
+                                        }
+                                    }
+
                                 }
-                                Err(e) => {
-                                    // server died, prolly. but hey, we're rebooting.
-                                    println!("Bridge: IPC read failed (Disconnected): {}", e);
+
+
+                                Some(response) = msg_queue.recv() => {
+                                if let Err(error) = ipc_client.write(&response).await {
+                                    println!("Bridge: IPC write failed: {}", error);
                                     break;
                                 }
+                                }
+
                             }
                         }
                     }
@@ -38,6 +55,8 @@ pub mod listener_service {
                     }
                 }
             }
-        })
+        });
+
+        (handle, enqueue)
     }
 }
