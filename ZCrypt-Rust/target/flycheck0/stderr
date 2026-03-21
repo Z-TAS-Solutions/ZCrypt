@@ -1,1 +1,45 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+   0.094984400s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint: fingerprint error for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: false }/TargetInner { name: "mod", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\mod.rs", Edition2024) }
+   0.095022800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust\target\debug\.fingerprint\ZCrypt-ee8aa0070aa9dcdb\bin-mod`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.106988100s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint: stale: changed "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs"
+   0.106999700s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint:           (vs) "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-0866c59a0f8c03f6\\dep-test-bin-mod"
+   0.107005300s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13418545259, nanos: 571776500 } < FileTime { seconds: 13418545265, nanos: 983843000 }
+   0.107169600s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint: fingerprint dirty for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: true }/TargetInner { name: "mod", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\mod.rs", Edition2024) }
+   0.107186000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="mod"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-0866c59a0f8c03f6\\dep-test-bin-mod", reference_mtime: FileTime { seconds: 13418545259, nanos: 571776500 }, stale: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs", stale_mtime: FileTime { seconds: 13418545265, nanos: 983843000 } }))
+   0.108039500s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint: stale: changed "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs"
+   0.108048800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:           (vs) "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-3ff53ae7f561db84\\dep-bin-server_test"
+   0.108053900s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13418545259, nanos: 573777000 } < FileTime { seconds: 13418545265, nanos: 983843000 }
+   0.108201900s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint: fingerprint dirty for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: false }/TargetInner { name: "server_test", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs", Edition2024) }
+   0.108215000s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-3ff53ae7f561db84\\dep-bin-server_test", reference_mtime: FileTime { seconds: 13418545259, nanos: 573777000 }, stale: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs", stale_mtime: FileTime { seconds: 13418545265, nanos: 983843000 } }))
+   0.108977300s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint: stale: changed "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs"
+   0.108986400s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:           (vs) "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-2c488ba77da9f509\\dep-test-bin-server_test"
+   0.108992500s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13418545259, nanos: 570777900 } < FileTime { seconds: 13418545265, nanos: 983843000 }
+   0.109139600s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint: fingerprint dirty for ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)/Check { test: true }/TargetInner { name: "server_test", doc: true, ..: with_path("D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs", Edition2024) }
+   0.109152800s  INFO prepare_target{force=false package_id=ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust) target="server_test"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\target\\debug\\.fingerprint\\ZCrypt-2c488ba77da9f509\\dep-test-bin-server_test", reference_mtime: FileTime { seconds: 13418545259, nanos: 570777900 }, stale: "D:\\Workspace\\Repositories\\ZCrypt\\ZCrypt-Rust\\src\\bin\\server_test.rs", stale_mtime: FileTime { seconds: 13418545265, nanos: 983843000 } }))
+    Checking ZCrypt v0.1.0 (D:\Workspace\Repositories\ZCrypt\ZCrypt-Rust)
+error: could not compile `ZCrypt` (bin "mod") due to 1 previous error
