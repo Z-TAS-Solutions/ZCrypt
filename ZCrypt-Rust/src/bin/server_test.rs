@@ -1,16 +1,18 @@
-use ZCrypt::ipc::ipc::ipc::Server;
-use std::io::Read;
+use named_pipe::PipeOptions;
+use std::io::{Read, Write};
 
 fn main() -> std::io::Result<()> {
-    let path = "rust_sockets.sock";
+    let path = r"\\.\pipe\zcrypt_sock";
 
-    let server = Server::bind(path)?;
-    println!("Server running at {}", path);
+    let server = PipeOptions::new(path).single()?;
+    println!("Server waiting for Peasant...");
+    let mut stream = server.wait()?;
+    println!("Peasant connected!");
 
-    let mut stream = server.accept()?;
-    let mut buffer = [0u8; 1024];
-    let n = stream.read(&mut buffer)?;
-    println!("msg received: {}", String::from_utf8_lossy(&buffer[..n]));
+    let mut buf = [0u8; 1024];
+    let n = stream.read(&mut buf)?;
+    println!("Response: {}", String::from_utf8_lossy(&buf[..n]));
 
+    stream.write_all(b"Kneel Down Peasant !")?;
     Ok(())
 }
