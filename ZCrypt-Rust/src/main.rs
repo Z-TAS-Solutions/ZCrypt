@@ -1,16 +1,12 @@
-use ZCrypt::zproto::PingRequest;
-use ZCrypt::zproto::test_service_client::TestServiceClient;
-use tokio::net::UnixStream;
-use tonic::transport::{Endpoint, Uri};
-use tower::service_fn;
+use ZCrypt::ipc::tonic_ipc::create_ipc_channel;
+use ZCrypt::zproto::zproto::PingRequest;
+use ZCrypt::zproto::zproto::ping_service_client::PingServiceClient;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let channel = Endpoint::try_from("http://[::]:50051")?
-        .connect_with_connector(service_fn(|_: Uri| UnixStream::connect("/tmp/zproto.sock")))
-        .await?;
+    let channel = create_ipc_channel().await?;
 
-    let mut client = TestServiceClient::new(channel);
+    let mut client = PingServiceClient::new(channel);
 
     let request = tonic::Request::new(PingRequest {
         message: "Ping from Rust!".into(),
@@ -18,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let response = client.ping(request).await?;
 
-    println!("RESPONSE={:?}", response.into_inner().reply);
+    println!("response = {:?}", response.into_inner().reply);
 
     Ok(())
 }
