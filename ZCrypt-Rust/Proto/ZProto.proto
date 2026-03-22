@@ -2,6 +2,15 @@ syntax = "proto3";
 
 package zproto;
 
+message ZIPCPacket {
+    uint64 request_id = 1;
+    oneof message {
+      PingRequest ping_request = 2;
+      PingResponse ping_response = 3;
+      TestPacket test_packet = 4;
+    }
+}
+
 message PingRequest {
   string message = 1;
 }
