@@ -59,4 +59,10 @@ pub mod listener_service {
 
         (handle, enqueue)
     }
+
+    pub async fn ipc_send(enqueue: &mpsc::Sender<Vec<u8>>, payload: Vec<u8>) {
+        if let Err(error) = enqueue.send(payload).await {
+            eprintln!("Failed To Enqueue Payload : {}", error);
+        }
+    }
 }
