@@ -1,3 +1,5 @@
+use std::time::Duration;
+use tokio::time::sleep;
 use tonic::transport::{Channel, Endpoint};
 use tower::util::service_fn;
 
@@ -22,9 +24,19 @@ pub mod tonic_ipc {
 }
 
 pub async fn create_ipc_channel() -> Result<Channel, Box<dyn std::error::Error>> {
-    let channel = Endpoint::from_static("http://Z-IPC")
-        .connect_with_connector(service_fn(|_| tonic_ipc::connect()))
-        .await?;
-
-    Ok(channel)
+    loop {
+        match Endpoint::from_static("http://Z-IPC")
+            .connect_with_connector(service_fn(|_| tonic_ipc::connect()))
+            .await
+        {
+            Ok(channel) => {
+                println!("Connected to IPC!");
+                return Ok(channel);
+            }
+            Err(_) => {
+                println!("Go Hub not found, retrying in 1s...");
+                sleep(Duration::from_secs(1)).await;
+            }
+        }
+    }
 }
