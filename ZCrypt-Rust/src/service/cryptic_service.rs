@@ -25,14 +25,12 @@ impl CrypticService for ZCrypticService {
         let req = request.into_inner();
         println!("Received fetch template request for user: {}", req.user_id);
 
-        
         // zeros just for testing, removing later..
         let kek_hex = env::var("KEK_SECRET").unwrap_or_else(|_| "0000000000000000000000000000000000000000000000000000000000000000".to_string());
         let kek_bytes = hex::decode(&kek_hex).map_err(|e| Status::internal(format!("Invalid KEK format: {}", e)))?;
 
         match self.db.request_cryptic_record(&req.user_id).await {
             Ok(Some(record)) => {
-                
                 match gcm_open(&kek_bytes, record) {
                     Ok(plaintext) => {
                         let response = FetchTemplateResponse {
@@ -64,7 +62,7 @@ impl CrypticService for ZCrypticService {
         }
     }
 
-    async fn store_cryptic_record(
+    async fn store_encrypted_template(
         &self,
         request: Request<crate::zproto::zproto::StoreTemplateRequest>,
     ) -> Result<Response<crate::zproto::zproto::StoreTemplateResponse>, Status> {
