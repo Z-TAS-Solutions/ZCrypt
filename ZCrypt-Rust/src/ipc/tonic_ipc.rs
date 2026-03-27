@@ -56,7 +56,7 @@ pub mod tonic_ipc_listener {
     pub type IPCStream = UnixStream;
 
     #[cfg(windows)]
-    pub type IPCStream = NamedPipeServer;
+    pub type IPCStream = ServerIPCStream;
 
     pub async fn listener() -> Pin<Box<dyn Stream<Item = Result<IPCStream, std::io::Error>> + Send>>
     {
@@ -75,8 +75,55 @@ pub mod tonic_ipc_listener {
             let pipe_name = r"\\.\pipe\zproto";
             let server = ServerOptions::new().create(pipe_name).unwrap();
             let (tx, rx) = tokio::sync::mpsc::channel(1);
-            tx.send(Ok(server)).await.unwrap();
+            tx.send(Ok(ServerIPCStream(server))).await.unwrap();
             Box::pin(ReceiverStream::new(rx))
+        }
+    }
+
+    #[cfg(windows)]
+    pub struct ServerIPCStream(pub NamedPipeServer);
+
+    #[cfg(windows)]
+    impl tonic::transport::server::Connected for ServerIPCStream {
+        type ConnectInfo = ();
+        fn connect_info(&self) -> Self::ConnectInfo {
+            ()
+        }
+    }
+
+    #[cfg(windows)]
+    impl tokio::io::AsyncRead for ServerIPCStream {
+        fn poll_read(
+            mut self: std::pin::Pin<&mut Self>,
+            cx: &mut std::task::Context<'_>,
+            buf: &mut tokio::io::ReadBuf<'_>,
+        ) -> std::task::Poll<std::io::Result<()>> {
+            std::pin::Pin::new(&mut self.0).poll_read(cx, buf)
+        }
+    }
+
+    #[cfg(windows)]
+    impl tokio::io::AsyncWrite for ServerIPCStream {
+        fn poll_write(
+            mut self: std::pin::Pin<&mut Self>,
+            cx: &mut std::task::Context<'_>,
+            buf: &[u8],
+        ) -> std::task::Poll<std::io::Result<usize>> {
+            std::pin::Pin::new(&mut self.0).poll_write(cx, buf)
+        }
+
+        fn poll_flush(
+            mut self: std::pin::Pin<&mut Self>,
+            cx: &mut std::task::Context<'_>,
+        ) -> std::task::Poll<std::io::Result<()>> {
+            std::pin::Pin::new(&mut self.0).poll_flush(cx)
+        }
+
+        fn poll_shutdown(
+            mut self: std::pin::Pin<&mut Self>,
+            cx: &mut std::task::Context<'_>,
+        ) -> std::task::Poll<std::io::Result<()>> {
+            std::pin::Pin::new(&mut self.0).poll_shutdown(cx)
         }
     }
 }
