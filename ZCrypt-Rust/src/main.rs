@@ -26,11 +26,19 @@ impl PingService for ZIPCPingService {
 
 use ZCrypt::zproto::zproto::cryptic_service_server::CrypticServiceServer;
 use ZCrypt::service::cryptic_service::ZCrypticService;
+use ZCrypt::db::Database;
+use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenvy::dotenv().ok();
+
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env");
+    let db = Database::init(&db_url).await.expect("Failed to bind to postgres backend");
+    println!("Connected to Database.");
+
     let ping_svc = PingServiceServer::new(ZIPCPingService);
-    let cryptic_svc = CrypticServiceServer::new(ZCrypticService);
+    let cryptic_svc = CrypticServiceServer::new(ZCrypticService::new(db));
 
     let incoming = tonic_ipc_listener::listener().await;
 
