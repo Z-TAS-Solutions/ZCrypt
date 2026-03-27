@@ -1,5 +1,5 @@
-use crate::zproto::zproto::cryptic_service_server::CrypticService;
-use crate::zproto::zproto::{FetchTemplateRequest, FetchTemplateResponse};
+use crate::zpipcproto::zpipcproto::cryptic_service_server::CrypticService;
+use crate::zpipcproto::zpipcproto::{FetchTemplateRequest, FetchTemplateResponse};
 use tonic::{Request, Response, Status};
 use std::env;
 
@@ -64,8 +64,8 @@ impl CrypticService for ZCrypticService {
 
     async fn store_encrypted_template(
         &self,
-        request: Request<crate::zproto::zproto::StoreTemplateRequest>,
-    ) -> Result<Response<crate::zproto::zproto::StoreTemplateResponse>, Status> {
+        request: Request<crate::zpipcproto::zpipcproto::StoreTemplateRequest>,
+    ) -> Result<Response<crate::zpipcproto::zpipcproto::StoreTemplateResponse>, Status> {
         let req = request.into_inner();
         println!("Received store template request for user: {}", req.user_id);
 
@@ -88,7 +88,7 @@ impl CrypticService for ZCrypticService {
 
         match self.db.store_user_cryptic_record(&req.user_id, record).await {
             Ok(_) => {
-                let response = crate::zproto::zproto::StoreTemplateResponse {
+                let response = crate::zpipcproto::zpipcproto::StoreTemplateResponse {
                     success: true,
                     error_message: String::new(),
                 };
@@ -100,8 +100,8 @@ impl CrypticService for ZCrypticService {
 
     async fn match_template(
         &self,
-        request: Request<crate::zproto::zproto::MatchTemplateRequest>,
-    ) -> Result<Response<crate::zproto::zproto::MatchTemplateResponse>, Status> {
+        request: Request<crate::zpipcproto::zpipcproto::MatchTemplateRequest>,
+    ) -> Result<Response<crate::zpipcproto::zpipcproto::MatchTemplateResponse>, Status> {
         let req = request.into_inner();
         println!("Received match template request for user: {}", req.user_id);
 
@@ -114,7 +114,7 @@ impl CrypticService for ZCrypticService {
         let record = match self.db.request_cryptic_record(&req.user_id).await {
             Ok(Some(rec)) => rec,
             Ok(None) => {
-                return Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+                return Ok(Response::new(crate::zpipcproto::zpipcproto::MatchTemplateResponse {
                     is_match: false,
                     confidence_score: 0.0,
                     error_message: format!("User {} not found", req.user_id),
@@ -126,7 +126,7 @@ impl CrypticService for ZCrypticService {
         let decrypted_db_template = match gcm_open(&kek_bytes, record) {
             Ok(plaintext) => plaintext,
             Err(e) => {
-                return Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+                return Ok(Response::new(crate::zpipcproto::zpipcproto::MatchTemplateResponse {
                     is_match: false,
                     confidence_score: 0.0,
                     error_message: format!("Failed to decrypt DB template: {:?}", e),
@@ -142,10 +142,11 @@ impl CrypticService for ZCrypticService {
             perform_template_match()
         };
 
-        Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+        Ok(Response::new(crate::zpipcproto::zpipcproto::MatchTemplateResponse {
             is_match: match_result,
             confidence_score: 0.0,
             error_message: String::new(),
         }))
     }
 }
+

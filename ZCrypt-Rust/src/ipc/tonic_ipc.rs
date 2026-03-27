@@ -13,12 +13,12 @@ pub mod tonic_ipc {
     pub async fn connect() -> Result<IPCStream, std::io::Error> {
         #[cfg(unix)]
         {
-            tokio::net::UnixStream::connect("/tmp/zproto.sock").await
+            tokio::net::UnixStream::connect("/tmp/zpipcproto.sock").await
         }
         #[cfg(windows)]
         {
             use tokio::net::windows::named_pipe::ClientOptions;
-            ClientOptions::new().open(r"\\.\pipe\zproto")
+            ClientOptions::new().open(r"\\.\pipe\zpipcproto")
         }
     }
 }
@@ -62,7 +62,7 @@ pub mod tonic_ipc_listener {
     {
         #[cfg(unix)]
         {
-            let path = "/tmp/zproto.sock";
+            let path = "/tmp/zpipcproto.sock";
             let _ = std::fs::remove_file(path);
             let listener = UnixListener::bind(path).unwrap();
             Box::pin(
@@ -72,7 +72,7 @@ pub mod tonic_ipc_listener {
 
         #[cfg(windows)]
         {
-            let pipe_name = r"\\.\pipe\zproto";
+            let pipe_name = r"\\.\pipe\zpipcproto";
             let server = ServerOptions::new().create(pipe_name).unwrap();
             let (tx, rx) = tokio::sync::mpsc::channel(1);
             tx.send(Ok(ServerIPCStream(server))).await.unwrap();
@@ -127,3 +127,4 @@ pub mod tonic_ipc_listener {
         }
     }
 }
+

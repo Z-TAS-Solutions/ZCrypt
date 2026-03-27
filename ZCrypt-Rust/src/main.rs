@@ -1,7 +1,7 @@
 use ZCrypt::ipc::tonic_ipc::tonic_ipc_listener;
-use ZCrypt::zproto::zproto::PingRequest;
-use ZCrypt::zproto::zproto::ping_service_server::{PingService, PingServiceServer};
-use ZCrypt::zproto::zproto::{self, PingResponse};
+use ZCrypt::zpipcproto::zpipcproto::PingRequest;
+use ZCrypt::zpipcproto::zpipcproto::ping_service_server::{PingService, PingServiceServer};
+use ZCrypt::zpipcproto::zpipcproto::{self, PingResponse};
 use tonic::transport::Server;
 
 struct ZIPCPingService;
@@ -24,7 +24,7 @@ impl PingService for ZIPCPingService {
     }
 }
 
-use ZCrypt::zproto::zproto::cryptic_service_server::CrypticServiceServer;
+use ZCrypt::zpipcproto::zpipcproto::cryptic_service_server::CrypticServiceServer;
 use ZCrypt::service::cryptic_service::ZCrypticService;
 use ZCrypt::db::Database;
 use std::env;
@@ -51,3 +51,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+

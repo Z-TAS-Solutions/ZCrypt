@@ -1,12 +1,12 @@
 use std::fs;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let proto_out = "src/zproto";
+    let proto_out = "src/zpipcproto";
     fs::create_dir_all(proto_out)?;
 
     tonic_build::configure()
         .out_dir(proto_out)
-        .compile(&["proto/ZProto.proto"], &["proto"])?;
+        .compile(&["Proto/zpipcproto.proto"], &["Proto"])?;
 
     // Build the C++ matching engine
     cc::Build::new()

@@ -1,10 +1,10 @@
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let channel = ZCrypt::ipc::tonic_ipc::create_ipc_channel().await?;
-    let mut client = ZCrypt::zproto::zproto::ping_service_client::PingServiceClient::new(channel);
+    let mut client = ZCrypt::zpipcproto::zpipcproto::ping_service_client::PingServiceClient::new(channel);
 
     loop {
-        let request = tonic::Request::new(ZCrypt::zproto::zproto::PingRequest {
+        let request = tonic::Request::new(ZCrypt::zpipcproto::zpipcproto::PingRequest {
             message: "Ping from Rust IPC!".into(),
         });
 
@@ -16,3 +16,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         tokio::time::sleep(std::time::Duration::from_secs(10)).await;
     }
 }
+

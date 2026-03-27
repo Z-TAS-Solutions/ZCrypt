@@ -1,6 +1,6 @@
 syntax = "proto3";
-package zproto;
-option go_package = "./api/grpc/zproto/";
+package zpipcproto;
+option go_package = "./api/grpc/zpipcproto/";
 
 service PingService {
   rpc Ping(PingRequest) returns (PingResponse);

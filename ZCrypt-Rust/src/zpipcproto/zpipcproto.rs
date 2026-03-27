@@ -164,9 +164,12 @@ pub mod ping_service_client {
                     )
                 })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/zproto.PingService/Ping");
+            let path = http::uri::PathAndQuery::from_static(
+                "/zpipcproto.PingService/Ping",
+            );
             let mut req = request.into_request();
-            req.extensions_mut().insert(GrpcMethod::new("zproto.PingService", "Ping"));
+            req.extensions_mut()
+                .insert(GrpcMethod::new("zpipcproto.PingService", "Ping"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -274,12 +277,15 @@ pub mod cryptic_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/zproto.CrypticService/FetchDecryptedTemplate",
+                "/zpipcproto.CrypticService/FetchDecryptedTemplate",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
-                    GrpcMethod::new("zproto.CrypticService", "FetchDecryptedTemplate"),
+                    GrpcMethod::new(
+                        "zpipcproto.CrypticService",
+                        "FetchDecryptedTemplate",
+                    ),
                 );
             self.inner.unary(req, path, codec).await
         }
@@ -301,12 +307,15 @@ pub mod cryptic_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/zproto.CrypticService/StoreEncryptedTemplate",
+                "/zpipcproto.CrypticService/StoreEncryptedTemplate",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
-                    GrpcMethod::new("zproto.CrypticService", "StoreEncryptedTemplate"),
+                    GrpcMethod::new(
+                        "zpipcproto.CrypticService",
+                        "StoreEncryptedTemplate",
+                    ),
                 );
             self.inner.unary(req, path, codec).await
         }
@@ -328,11 +337,11 @@ pub mod cryptic_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/zproto.CrypticService/MatchTemplate",
+                "/zpipcproto.CrypticService/MatchTemplate",
             );
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("zproto.CrypticService", "MatchTemplate"));
+                .insert(GrpcMethod::new("zpipcproto.CrypticService", "MatchTemplate"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -428,7 +437,7 @@ pub mod ping_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/zproto.PingService/Ping" => {
+                "/zpipcproto.PingService/Ping" => {
                     #[allow(non_camel_case_types)]
                     struct PingSvc<T: PingService>(pub Arc<T>);
                     impl<T: PingService> tonic::server::UnaryService<super::PingRequest>
@@ -510,7 +519,7 @@ pub mod ping_service_server {
         }
     }
     impl<T: PingService> tonic::server::NamedService for PingServiceServer<T> {
-        const NAME: &'static str = "zproto.PingService";
+        const NAME: &'static str = "zpipcproto.PingService";
     }
 }
 /// Generated server implementations.
@@ -621,7 +630,7 @@ pub mod cryptic_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/zproto.CrypticService/FetchDecryptedTemplate" => {
+                "/zpipcproto.CrypticService/FetchDecryptedTemplate" => {
                     #[allow(non_camel_case_types)]
                     struct FetchDecryptedTemplateSvc<T: CrypticService>(pub Arc<T>);
                     impl<
@@ -671,7 +680,7 @@ pub mod cryptic_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/zproto.CrypticService/StoreEncryptedTemplate" => {
+                "/zpipcproto.CrypticService/StoreEncryptedTemplate" => {
                     #[allow(non_camel_case_types)]
                     struct StoreEncryptedTemplateSvc<T: CrypticService>(pub Arc<T>);
                     impl<
@@ -721,7 +730,7 @@ pub mod cryptic_service_server {
                     };
                     Box::pin(fut)
                 }
-                "/zproto.CrypticService/MatchTemplate" => {
+                "/zpipcproto.CrypticService/MatchTemplate" => {
                     #[allow(non_camel_case_types)]
                     struct MatchTemplateSvc<T: CrypticService>(pub Arc<T>);
                     impl<
@@ -805,6 +814,6 @@ pub mod cryptic_service_server {
         }
     }
     impl<T: CrypticService> tonic::server::NamedService for CrypticServiceServer<T> {
-        const NAME: &'static str = "zproto.CrypticService";
+        const NAME: &'static str = "zpipcproto.CrypticService";
     }
 }
