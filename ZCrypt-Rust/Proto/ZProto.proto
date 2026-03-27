@@ -13,3 +13,17 @@ message PingRequest {
 message PingResponse {
   string reply = 1;
 }
+
+service CrypticService {
+  rpc FetchDecryptedTemplate(FetchTemplateRequest) returns (FetchTemplateResponse);
+}
+
+message FetchTemplateRequest {
+  string user_id = 1;
+}
+
+message FetchTemplateResponse {
+  bool success = 1;
+  bytes template_data = 2;
+  string error_message = 3;
+}
