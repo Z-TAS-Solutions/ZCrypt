@@ -72,11 +72,24 @@ pub mod tonic_ipc_listener {
 
         #[cfg(windows)]
         {
-            let pipe_name = r"\\.\pipe\zpipcproto";
-            let server = ServerOptions::new().create(pipe_name).unwrap();
-            let (tx, rx) = tokio::sync::mpsc::channel(1);
-            tx.send(Ok(ServerIPCStream(server))).await.unwrap();
-            Box::pin(ReceiverStream::new(rx))
+            let stream = futures::stream::unfold(true, |is_first| async move {
+                let pipe_name = r"\\.\pipe\zpipcproto";
+                let server = match ServerOptions::new()
+                    .first_pipe_instance(is_first)
+                    .create(pipe_name)
+                {
+                    Ok(s) => s,
+                    Err(e) => return Some((Err(e), false)),
+                };
+
+                // Wait for a client to connect
+                if let Err(e) = server.connect().await {
+                    return Some((Err(e), false));
+                }
+
+                Some((Ok(ServerIPCStream(server)), false))
+            });
+            Box::pin(stream)
         }
     }
 
