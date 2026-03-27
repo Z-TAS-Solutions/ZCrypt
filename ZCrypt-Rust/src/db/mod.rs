@@ -33,4 +33,18 @@ impl Database {
 
         Ok(None)
     }
+
+    pub async fn store_user_cryptic_record(&self, user_id: &str, record: CrypticRecord) -> Result<(), SqlxError> {
+        let json_record = sqlx::types::Json(record);
+
+        sqlx::query(
+            "UPDATE users SET cryptic_record = $1 WHERE custom_id = $2"
+        )
+        .bind(&json_record)
+        .bind(user_id)
+        .execute(&self.pool)
+        .await?;
+
+        Ok(())
+    }
 }

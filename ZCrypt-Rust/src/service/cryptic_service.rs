@@ -63,4 +63,40 @@ impl CrypticService for ZCrypticService {
             Err(e) => Err(Status::internal(format!("Database error: {}", e))),
         }
     }
+
+    async fn store_cryptic_record(
+        &self,
+        request: Request<crate::zproto::zproto::StoreTemplateRequest>,
+    ) -> Result<Response<crate::zproto::zproto::StoreTemplateResponse>, Status> {
+        let req = request.into_inner();
+        println!("Received store template request for user: {}", req.user_id);
+
+        let kek_hex = env::var("KEK_SECRET").unwrap_or_else(|_| {
+            "0000000000000000000000000000000000000000000000000000000000000000".to_string()
+        });
+        let kek_bytes = hex::decode(&kek_hex)
+            .map_err(|e| Status::internal(format!("Invalid KEK format: {}", e)))?;
+
+        let aad = crate::cryptic_engine::aad_builder::AADBuilder::new()
+            .user_id(&req.user_id)
+            .template_id(&req.template_id)
+            .template_type(&req.template_type)
+            .schema_version(1)
+            .template_ver(1)
+            .build();
+
+        let record = crate::cryptic_engine::encrypt::gcm_seal(&kek_bytes, aad, req.raw_template_data)
+            .map_err(|e| Status::internal(format!("Encryption failed: {:?}", e)))?;
+
+        match self.db.store_user_cryptic_record(&req.user_id, record).await {
+            Ok(_) => {
+                let response = crate::zproto::zproto::StoreTemplateResponse {
+                    success: true,
+                    error_message: String::new(),
+                };
+                Ok(Response::new(response))
+            }
+            Err(e) => Err(Status::internal(format!("Database write error: {}", e))),
+        }
+    }
 }
