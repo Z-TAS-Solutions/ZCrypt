@@ -19,6 +19,8 @@ hyper = "1.8.1"
 tower = { version = "0.4", features = ["util"] }
 futures = "0.3.32"
 tokio-stream = "0.1.18"
+sqlx = { version = "0.8.2", features = ["runtime-tokio-rustls", "postgres", "json", "macros"] }
+dotenvy = "0.15"
 
 [build-dependencies]
 tonic-build = "0.11"
