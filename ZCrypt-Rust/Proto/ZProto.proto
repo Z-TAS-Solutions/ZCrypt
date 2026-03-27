@@ -17,6 +17,18 @@ message PingResponse {
 service CrypticService {
   rpc FetchDecryptedTemplate(FetchTemplateRequest) returns (FetchTemplateResponse);
   rpc StoreEncryptedTemplate(StoreTemplateRequest) returns (StoreTemplateResponse);
+  rpc MatchTemplate(MatchTemplateRequest) returns (MatchTemplateResponse);
+}
+
+message MatchTemplateRequest {
+  string user_id = 1;
+  bytes live_template_data = 2;
+}
+
+message MatchTemplateResponse {
+  bool is_match = 1;
+  float confidence_score = 2;
+  string error_message = 3;
 }
 
 message FetchTemplateRequest {

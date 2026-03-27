@@ -97,4 +97,55 @@ impl CrypticService for ZCrypticService {
             Err(e) => Err(Status::internal(format!("Database write error: {}", e))),
         }
     }
+
+    async fn match_template(
+        &self,
+        request: Request<crate::zproto::zproto::MatchTemplateRequest>,
+    ) -> Result<Response<crate::zproto::zproto::MatchTemplateResponse>, Status> {
+        let req = request.into_inner();
+        println!("Received match template request for user: {}", req.user_id);
+
+        let kek_hex = env::var("KEK_SECRET").unwrap_or_else(|_| {
+            "0000000000000000000000000000000000000000000000000000000000000000".to_string()
+        });
+        let kek_bytes = hex::decode(&kek_hex)
+            .map_err(|e| Status::internal(format!("Invalid KEK format: {}", e)))?;
+
+        let record = match self.db.request_cryptic_record(&req.user_id).await {
+            Ok(Some(rec)) => rec,
+            Ok(None) => {
+                return Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+                    is_match: false,
+                    confidence_score: 0.0,
+                    error_message: format!("User {} not found", req.user_id),
+                }));
+            }
+            Err(e) => return Err(Status::internal(format!("Database error: {}", e))),
+        };
+
+        let decrypted_db_template = match gcm_open(&kek_bytes, record) {
+            Ok(plaintext) => plaintext,
+            Err(e) => {
+                return Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+                    is_match: false,
+                    confidence_score: 0.0,
+                    error_message: format!("Failed to decrypt DB template: {:?}", e),
+                }));
+            }
+        };
+
+        unsafe extern "C" {
+            fn perform_template_match() -> bool;
+        }
+
+        let match_result = unsafe {
+            perform_template_match()
+        };
+
+        Ok(Response::new(crate::zproto::zproto::MatchTemplateResponse {
+            is_match: match_result,
+            confidence_score: 0.0,
+            error_message: String::new(),
+        }))
+    }
 }

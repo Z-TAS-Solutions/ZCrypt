@@ -13,6 +13,24 @@ pub struct PingResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MatchTemplateRequest {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "2")]
+    pub live_template_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MatchTemplateResponse {
+    #[prost(bool, tag = "1")]
+    pub is_match: bool,
+    #[prost(float, tag = "2")]
+    pub confidence_score: f32,
+    #[prost(string, tag = "3")]
+    pub error_message: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FetchTemplateRequest {
     #[prost(string, tag = "1")]
     pub user_id: ::prost::alloc::string::String,
@@ -292,6 +310,31 @@ pub mod cryptic_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        pub async fn match_template(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MatchTemplateRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::MatchTemplateResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/zproto.CrypticService/MatchTemplate",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("zproto.CrypticService", "MatchTemplate"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -491,6 +534,13 @@ pub mod cryptic_service_server {
             tonic::Response<super::StoreTemplateResponse>,
             tonic::Status,
         >;
+        async fn match_template(
+            &self,
+            request: tonic::Request<super::MatchTemplateRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::MatchTemplateResponse>,
+            tonic::Status,
+        >;
     }
     #[derive(Debug)]
     pub struct CrypticServiceServer<T: CrypticService> {
@@ -656,6 +706,52 @@ pub mod cryptic_service_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = StoreEncryptedTemplateSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/zproto.CrypticService/MatchTemplate" => {
+                    #[allow(non_camel_case_types)]
+                    struct MatchTemplateSvc<T: CrypticService>(pub Arc<T>);
+                    impl<
+                        T: CrypticService,
+                    > tonic::server::UnaryService<super::MatchTemplateRequest>
+                    for MatchTemplateSvc<T> {
+                        type Response = super::MatchTemplateResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MatchTemplateRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as CrypticService>::match_template(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = MatchTemplateSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

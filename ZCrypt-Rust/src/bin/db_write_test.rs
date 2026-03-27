@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match db.store_user_cryptic_record(target_custom_id, record).await {
         Ok(_) => {
             println!("Successfully executed the update query for {}!", target_custom_id);
-            println!("Note: If zero rows were updated, make sure the user exists and the 'cryptic_record' column is JSONB.");
+            println!("If zero rows were updated, make sure the user exists and the 'cryptic_record' column is JSONB.");
         }
         Err(e) => {
             eprintln!("Database write test failed: {:?}", e);
