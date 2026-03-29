@@ -82,7 +82,6 @@ pub mod tonic_ipc_listener {
                     Err(e) => return Some((Err(e), false)),
                 };
 
-                // Wait for a client to connect
                 if let Err(e) = server.connect().await {
                     return Some((Err(e), false));
                 }
